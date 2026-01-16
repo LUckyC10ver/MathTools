@@ -162,7 +162,7 @@ namespace MathTools.Core
         {
             ValidateDimension(dimension);
             var coords = _coordinates[dimension];
-            return coords[^1];
+            return coords[coords.Count - 1];
         }
 
         /// <inheritdoc />
@@ -472,7 +472,7 @@ namespace MathTools.Core
                 {
                     int index = GetIndex(multiIndex);
                     EnsureValueSize();
-                    _values[index] = point[^1];
+                    _values[index] = point[point.Length - 1];
                 }
 
                 number++;

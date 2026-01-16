@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathTools.Core.Extensions;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace MathTools.Core
@@ -739,7 +738,22 @@ namespace MathTools.Core
         /// <returns></returns>
         public static double normInfinity(double[][] m)
         {
-            return m.ToMatrix().LInfinityNorm();
+            double max = 0.0;
+            for (int i = 0; i < m.Length; i++)
+            {
+                double sum = 0.0;
+                for (int j = 0; j < m[i].Length; j++)
+                {
+                    sum += Math.Abs(m[i][j]);
+                }
+
+                if (sum > max)
+                {
+                    max = sum;
+                }
+            }
+
+            return max;
         }
 
         /// <summary>
@@ -1374,14 +1388,21 @@ namespace MathTools.Core
         /// <exception cref="Exception"></exception>
         public static void getDiag(ref double[] diag, double[][] mat, int offset = 0)
         {
-            var matrix = mat.ToMatrix();
-            int size = Math.Min(matrix.RowCount, matrix.ColumnCount) - Math.Abs(offset);
+            int rows = mat.Length;
+            int cols = rows == 0 ? 0 : mat[0].Length;
+            int size = Math.Min(rows, cols) - Math.Abs(offset);
             if (size < 0)
             {
                 throw new Exception("offset larger than matrix size");
             }
 
-            diag = matrix.Diagonal(offset).ToArray();
+            diag = new double[size];
+            for (int i = 0; i < size; i++)
+            {
+                int row = offset >= 0 ? i : i - offset;
+                int col = offset >= 0 ? i + offset : i;
+                diag[i] = mat[row][col];
+            }
         }
 
         /// <summary>

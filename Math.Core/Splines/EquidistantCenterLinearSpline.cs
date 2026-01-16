@@ -51,7 +51,7 @@ namespace MathTools.Core
             }
 
             _xmin = x[0];
-            _xmax = x[^1];
+            _xmax = x[x.Length - 1];
             _dx = (_xmax - _xmin) / (x.Length - 1);
             _xmin -= 0.5 * _dx;
             _xmax += 0.5 * _dx;
@@ -107,7 +107,7 @@ namespace MathTools.Core
             if (_data.Length - 1 <= index)
             {
                 return (x - _xmax + 0.5 * _dx)
-                       * (_data[^1] - _data[^2]) / _dx + _data[^1];
+                       * (_data[_data.Length - 1] - _data[_data.Length - 2]) / _dx + _data[_data.Length - 1];
             }
 
             double help = ((x - _xmin) - index * _dx - _dx / 2.0) / _dx;

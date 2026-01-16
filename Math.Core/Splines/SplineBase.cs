@@ -166,7 +166,7 @@ namespace MathTools.Core
                 return;
             }
 
-            double maxAbs = Math.Max(Math.Abs(_xValues[0]), Math.Abs(_xValues[^1]));
+            double maxAbs = Math.Max(Math.Abs(_xValues[0]), Math.Abs(_xValues[_xValues.Length - 1]));
             _epsilon = MathCoreInfo.BcEpsEquidistantLinearSpline * maxAbs;
         }
     }

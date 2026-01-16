@@ -135,7 +135,7 @@ namespace MathTools.Core
                     _coeffs[i] = _coeffs[i + 1] * (i + 1);
                 }
 
-                _coeffs[^1] = 0.0;
+                _coeffs[_coeffs.Length - 1] = 0.0;
             }
 
             public void Integrate()

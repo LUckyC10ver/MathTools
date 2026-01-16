@@ -62,7 +62,7 @@ namespace MathTools.Core
                 return;
             }
 
-            double averageHalfWidth = 4.0 * (_points[^1] - _points[0]) / _points.Length;
+            double averageHalfWidth = 4.0 * (_points[_points.Length - 1] - _points[0]) / _points.Length;
             double kValue = -Math.Log(0.01) / Functions.sqr(averageHalfWidth);
             for (int i = 0; i < _k.Length; i++)
             {

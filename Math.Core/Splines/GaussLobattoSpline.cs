@@ -48,7 +48,7 @@ namespace MathTools.Core
             }
 
             _xmin = x[0];
-            _xmax = x[^1];
+            _xmax = x[x.Length - 1];
 
             _data = new double[x.Length];
             int externIndex = 0;
@@ -140,7 +140,7 @@ namespace MathTools.Core
 
             if (index > _data.Length - 1)
             {
-                return _data[^1];
+                return _data[_data.Length - 1];
             }
 
             double xLeft = XOfIndex(index);

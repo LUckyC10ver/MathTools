@@ -1,5 +1,4 @@
 using System;
-using MathTools.Core.Extensions;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace MathTools.Core
