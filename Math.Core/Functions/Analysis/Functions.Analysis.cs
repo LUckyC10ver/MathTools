@@ -300,12 +300,12 @@ namespace Math.Core
             ref double d2f,
             Func<double, double> f,
             double x,
-            double omega = 1.e-08,
-            double eta = 1.e-08,
+            double omega = 1e-8,
+            double eta = 1e-8,
             int K = 10,
-            double epsA = 1.e-08,
-            double epsM = 1.e-16,
-            double big = 1.e+30)
+            double epsA = 1e-8,
+            double epsM = 1e-16,
+            double big = 1e30)
         {
             const double diffMin = 0.001;
             const double diffMax = 0.1;
