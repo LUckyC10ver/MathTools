@@ -6,7 +6,7 @@ namespace Math.Core.Legacy.Functions
     /// <summary>
     /// 高斯钟形函数集合，通过权重加权输出。
     /// </summary>
-    public abstract class GaussBellFunction
+    public abstract class BCGaussBellFunction
     {
         /// <summary>
         /// 单个 bell 结构。
@@ -17,9 +17,6 @@ namespace Math.Core.Legacy.Functions
             private double _y;
             private double _halfWidth;
 
-            /// <summary>
-            /// 创建 bell。
-            /// </summary>
             public Bell(double x, double y, double halfWidth)
             {
                 _x = x;
@@ -27,9 +24,6 @@ namespace Math.Core.Legacy.Functions
                 _halfWidth = Math.Abs(halfWidth);
             }
 
-            /// <summary>
-            /// 计算 bell 权重。
-            /// </summary>
             public double Weight(double argument)
             {
                 const double valueAtHalfWidth = 0.01;
@@ -42,9 +36,6 @@ namespace Math.Core.Legacy.Functions
                 return Math.Exp(Math.Log(valueAtHalfWidth) * Functions.sqr(distance / _halfWidth));
             }
 
-            /// <summary>
-            /// bell 输出。
-            /// </summary>
             public double Evaluate(double argument) => _y * Weight(argument);
 
             public double X => _x;
@@ -58,14 +49,8 @@ namespace Math.Core.Legacy.Functions
 
         private readonly List<Bell> _bells = new();
 
-        /// <summary>
-        /// bell 列表。
-        /// </summary>
         public IList<Bell> Bells => _bells;
 
-        /// <summary>
-        /// 计算函数值。
-        /// </summary>
         public double Evaluate(double argument)
         {
             double sum1 = 0.0;
@@ -85,9 +70,6 @@ namespace Math.Core.Legacy.Functions
             return sum1 / sum2;
         }
 
-        /// <summary>
-        /// 最小 x。
-        /// </summary>
         public double XMin()
         {
             if (_bells.Count == 0)
@@ -104,9 +86,6 @@ namespace Math.Core.Legacy.Functions
             return result;
         }
 
-        /// <summary>
-        /// 最大 x。
-        /// </summary>
         public double XMax()
         {
             if (_bells.Count == 0)
@@ -123,9 +102,6 @@ namespace Math.Core.Legacy.Functions
             return result;
         }
 
-        /// <summary>
-        /// 初始化 bell 集合。
-        /// </summary>
         public abstract void Init();
     }
 }

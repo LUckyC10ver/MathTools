@@ -11,23 +11,14 @@ namespace Math.Core.Legacy.Raster
         private double _value;
         private double _raster;
 
-        /// <summary>
-        /// 创建 raster。
-        /// </summary>
         public BCRaster(double value = 0.0, double raster = 0.0)
         {
             _value = value;
             _raster = raster;
         }
 
-        /// <summary>
-        /// 当前值。
-        /// </summary>
         public double Value => _value;
 
-        /// <summary>
-        /// 设置栅格步长。
-        /// </summary>
         public void SetRaster(double raster)
         {
             if (raster < 0.0)
@@ -40,9 +31,6 @@ namespace Math.Core.Legacy.Raster
             SetValue(_value);
         }
 
-        /// <summary>
-        /// 设置值并进行栅格化。
-        /// </summary>
         public void SetValue(double value)
         {
             if (_raster != 0.0)
@@ -57,9 +45,6 @@ namespace Math.Core.Legacy.Raster
             _value = value;
         }
 
-        /// <summary>
-        /// 输出当前值。
-        /// </summary>
         public void Output(TextWriter writer)
         {
             if (writer == null)
@@ -70,28 +55,32 @@ namespace Math.Core.Legacy.Raster
             writer.WriteLine($"{_value}(+-{0.5 * _raster})");
         }
 
-        /// <summary>
-        /// 数值乘法。
-        /// </summary>
-        public void Multiply(double factor)
-        {
-            SetValue(_value * factor);
-        }
+        public void Multiply(double factor) => SetValue(_value * factor);
+        public void Subtract(double value) => SetValue(_value - value);
+        public void Add(double value) => SetValue(_value + value);
+    }
 
-        /// <summary>
-        /// 数值相减。
-        /// </summary>
-        public void Subtract(double value)
-        {
-            SetValue(_value - value);
-        }
+    /// <summary>
+    /// 布尔值栅格包装。
+    /// </summary>
+    public sealed class BCboolRaster
+    {
+        private bool _value;
 
-        /// <summary>
-        /// 数值相加。
-        /// </summary>
-        public void Add(double value)
+        public BCboolRaster(bool value) => _value = value;
+
+        public bool Value => _value;
+
+        public void SetValue(bool value) => _value = value;
+
+        public void Output(TextWriter writer)
         {
-            SetValue(_value + value);
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
+
+            writer.WriteLine(_value);
         }
     }
 }

@@ -3,6 +3,75 @@ using System;
 namespace Math.Core.Legacy.Filters
 {
     /// <summary>
+    /// Gaussian-like低通滤波器：按点的局部权重进行加权平均。
+    /// </summary>
+    public sealed class BCGLPFilter
+    {
+        private readonly double[] _points;
+        private readonly double[] _values;
+        private readonly double[] _k;
+
+        public BCGLPFilter(double[] points, double[] values, bool sorted = false)
+        {
+            if (points == null || values == null || points.Length != values.Length)
+            {
+                throw new ArgumentException("points and values must have same length");
+            }
+
+            _points = (double[])points.Clone();
+            _values = (double[])values.Clone();
+
+            if (!sorted)
+            {
+                Functions.sortPoints(ref _points, ref _values);
+            }
+
+            _k = new double[_points.Length];
+            InitHalfWidth();
+        }
+
+        public double Evaluate(double x)
+        {
+            double sumWeight = 0.0;
+            double sumY = 0.0;
+            for (int i = 0; i < _points.Length; i++)
+            {
+                double help = Math.Exp(-_k[i] * Functions.sqr(_points[i] - x));
+                sumWeight += help;
+                sumY += help * _values[i];
+            }
+
+            return sumY / sumWeight;
+        }
+
+        public double WeightOfX(double x)
+        {
+            double sumWeight = 0.0;
+            for (int i = 0; i < _points.Length; i++)
+            {
+                sumWeight += Math.Exp(-_k[i] * Functions.sqr(_points[i] - x));
+            }
+
+            return sumWeight;
+        }
+
+        private void InitHalfWidth()
+        {
+            if (_points.Length == 0)
+            {
+                return;
+            }
+
+            double averageHalfWidth = 4.0 * (_points[^1] - _points[0]) / _points.Length;
+            double kValue = -Math.Log(0.01) / Functions.sqr(averageHalfWidth);
+            for (int i = 0; i < _k.Length; i++)
+            {
+                _k[i] = kValue;
+            }
+        }
+    }
+
+    /// <summary>
     /// 线性时不变滤波器实现。
     /// </summary>
     public sealed class BCLtiFilter
@@ -13,9 +82,6 @@ namespace Math.Core.Legacy.Filters
         private double _out;
         private double _z0;
 
-        /// <summary>
-        /// 初始化滤波器。
-        /// </summary>
         public void Init(double[] a, double[] b, double z0)
         {
             if (a == null || b == null || a.Length == 0 || b.Length == 0)
@@ -56,9 +122,6 @@ namespace Math.Core.Legacy.Filters
             _out = _z0;
         }
 
-        /// <summary>
-        /// 重置内部状态。
-        /// </summary>
         public void Reset()
         {
             for (int i = 0; i < _state.Length; i++)
@@ -69,9 +132,6 @@ namespace Math.Core.Legacy.Filters
             _out = _z0;
         }
 
-        /// <summary>
-        /// 计算下一步输出。
-        /// </summary>
         public double Tick(double input)
         {
             if (_state.Length == 0)
@@ -83,8 +143,7 @@ namespace Math.Core.Legacy.Filters
             int n = _state.Length - 1;
             for (int i = 0; i < n; i++)
             {
-                double next = input * _b[i + 1] - _out * _a[i + 1] + _state[i + 1];
-                _state[i] = next;
+                _state[i] = input * _b[i + 1] - _out * _a[i + 1] + _state[i + 1];
             }
 
             _state[n] = input * _b[n + 1] - _out * _a[n + 1];

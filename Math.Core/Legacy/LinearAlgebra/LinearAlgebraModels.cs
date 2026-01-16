@@ -15,9 +15,6 @@ namespace Math.Core.Legacy.LinearAlgebra
         private double _eps;
         private int _k;
 
-        /// <summary>
-        /// 构造并初始化分解。
-        /// </summary>
         public BCILUT(Matrix<double> matrix, int k, double eps)
         {
             if (matrix == null)
@@ -30,24 +27,10 @@ namespace Math.Core.Legacy.LinearAlgebra
             Init(matrix);
         }
 
-        /// <summary>
-        /// 被丢弃元素数量（简化实现固定为 0）。
-        /// </summary>
         public int Dropped => _dropped;
-
-        /// <summary>
-        /// 下三角矩阵。
-        /// </summary>
         public Matrix<double> Lower => _lower;
-
-        /// <summary>
-        /// 上三角矩阵。
-        /// </summary>
         public Matrix<double> Upper => _upper;
 
-        /// <summary>
-        /// 通过 LU 分解初始化。
-        /// </summary>
         public void Init(Matrix<double> matrix)
         {
             var lu = matrix.LU();
@@ -56,9 +39,6 @@ namespace Math.Core.Legacy.LinearAlgebra
             _dropped = 0;
         }
 
-        /// <summary>
-        /// 求解线性系统（使用 LU）。
-        /// </summary>
         public Vector<double> Solve(Vector<double> rhs)
         {
             if (_lower == null || _upper == null)
@@ -70,9 +50,6 @@ namespace Math.Core.Legacy.LinearAlgebra
             return _upper.Solve(y);
         }
 
-        /// <summary>
-        /// 输出对象信息。
-        /// </summary>
         public void Output(TextWriter writer)
         {
             if (writer == null)

@@ -17,9 +17,6 @@ namespace Math.Core.Legacy.Analysis
         private Vector<double> _mean;
         private Vector<double> _std;
 
-        /// <summary>
-        /// 添加样本向量。
-        /// </summary>
         public void AddPattern(double[] vector)
         {
             if (vector == null)
@@ -30,9 +27,6 @@ namespace Math.Core.Legacy.Analysis
             _patterns.Add((double[])vector.Clone());
         }
 
-        /// <summary>
-        /// 执行 PCA 计算。
-        /// </summary>
         public void Calculate()
         {
             if (_patterns.Count == 0)
@@ -78,9 +72,6 @@ namespace Math.Core.Legacy.Analysis
             _v = svd.VT.Transpose();
         }
 
-        /// <summary>
-        /// 获取指定主成分的特征值。
-        /// </summary>
         public double GetEigenvalue(int index)
         {
             if (_w == null)
@@ -91,9 +82,6 @@ namespace Math.Core.Legacy.Analysis
             return _w[index] * _w[index];
         }
 
-        /// <summary>
-        /// 执行降维转换。
-        /// </summary>
         public double[] Transform(double[] input, int components)
         {
             if (_v == null || _mean == null || _std == null)
@@ -120,9 +108,6 @@ namespace Math.Core.Legacy.Analysis
             return projected.SubVector(0, components).ToArray();
         }
 
-        /// <summary>
-        /// 保存 PCA 模型。
-        /// </summary>
         public void Save(string filePath)
         {
             if (_v == null || _w == null || _mean == null || _std == null)
@@ -140,9 +125,6 @@ namespace Math.Core.Legacy.Analysis
             }
         }
 
-        /// <summary>
-        /// 读取 PCA 模型。
-        /// </summary>
         public void Load(string filePath, int dimension)
         {
             using var reader = new StreamReader(filePath);

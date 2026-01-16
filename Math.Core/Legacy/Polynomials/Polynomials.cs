@@ -11,9 +11,6 @@ namespace Math.Core.Legacy.Polynomials
         private readonly double[] _coeff;
         private int _degree;
 
-        /// <summary>
-        /// 创建一个固定阶数多项式，系数默认全为零。
-        /// </summary>
         public BCTinyPolynomial(int maxDegree)
         {
             if (maxDegree < 0)
@@ -25,9 +22,6 @@ namespace Math.Core.Legacy.Polynomials
             ComputeDegree();
         }
 
-        /// <summary>
-        /// 使用给定系数初始化，按降阶存储。
-        /// </summary>
         public BCTinyPolynomial(double[] coefficients)
         {
             if (coefficients == null || coefficients.Length == 0)
@@ -39,19 +33,9 @@ namespace Math.Core.Legacy.Polynomials
             ComputeDegree();
         }
 
-        /// <summary>
-        /// 最大阶数。
-        /// </summary>
         public int MaxDegree => _coeff.Length - 1;
-
-        /// <summary>
-        /// 当前阶数（忽略最高次的零系数）。
-        /// </summary>
         public int Degree => _degree;
 
-        /// <summary>
-        /// 获取指定幂次的系数。
-        /// </summary>
         public double GetCoefficient(int degree)
         {
             if (degree < 0 || degree > MaxDegree)
@@ -62,9 +46,6 @@ namespace Math.Core.Legacy.Polynomials
             return _coeff[MaxDegree - degree];
         }
 
-        /// <summary>
-        /// 设置指定幂次的系数。
-        /// </summary>
         public void SetCoefficient(int degree, double value)
         {
             if (degree < 0 || degree > MaxDegree)
@@ -76,9 +57,6 @@ namespace Math.Core.Legacy.Polynomials
             ComputeDegree();
         }
 
-        /// <summary>
-        /// 计算多项式值。
-        /// </summary>
         public double Evaluate(double argument)
         {
             double result = 0.0;
@@ -90,9 +68,6 @@ namespace Math.Core.Legacy.Polynomials
             return result;
         }
 
-        /// <summary>
-        /// 计算导数值。
-        /// </summary>
         public double EvaluateDerivative(double argument)
         {
             double result = 0.0;
@@ -105,9 +80,6 @@ namespace Math.Core.Legacy.Polynomials
             return result;
         }
 
-        /// <summary>
-        /// 获取导数多项式。
-        /// </summary>
         public BCTinyPolynomial GetDerivative()
         {
             if (MaxDegree == 0)
@@ -125,9 +97,6 @@ namespace Math.Core.Legacy.Polynomials
             return new BCTinyPolynomial(coeff);
         }
 
-        /// <summary>
-        /// 输出多项式信息。
-        /// </summary>
         public void Output(TextWriter writer)
         {
             if (writer == null)

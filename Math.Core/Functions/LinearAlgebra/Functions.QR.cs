@@ -1,4 +1,6 @@
 using System;
+using Math.Core.Extensions;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Math.Core
 {
@@ -18,12 +20,19 @@ namespace Math.Core
         {
             int rows = A.Length;
             int cols = A[0].Length;
-            int minDim = Math.Min(rows, cols);
-
             perm = new int[cols];
             for (int i = 0; i < cols; i++)
             {
                 perm[i] = i;
+            }
+
+            if (sort == 0 && rows > 0 && cols > 0)
+            {
+                var matrix = A.ToMatrix();
+                var qr = matrix.QR();
+                Q = ToJagged(qr.Q);
+                R = ToJagged(qr.R);
+                return ComputeRank(qr.R, eps);
             }
 
             if (rows == 0)
@@ -410,27 +419,18 @@ namespace Math.Core
                 throw new Exception("size(b) != rows(A)");
             }
 
-            var C = new double[0][].Resize(rows, cols);
-            for (int i = 0; i < rows; i++)
+            var matrix = A.ToMatrix();
+            var qr = matrix.QR();
+            Q = ToJagged(qr.Q);
+            R = ToJagged(qr.R);
+            perm = new int[cols];
+            for (int i = 0; i < cols; i++)
             {
-                for (int j = 0; j < cols; j++)
-                {
-                    C[i][j] = A[i][j];
-                }
+                perm[i] = i;
             }
 
-            int rank = QRfactorize(ref C, out var diagR, out perm, 1, eps);
-            if (rank == 0)
-            {
-                return minDim;
-            }
-
-            QRcalcHouseholders(out Q, C, perm, rank);
-            QRcalcUpperRightTriangle(out R, C, diagR, perm);
-
-            QRapplyHouseholders(out var rhs, C, perm, rank, b);
-            QRbacksubstitute(out x, C, diagR, perm, rank, rhs);
-
+            x = qr.Solve(Vector<double>.Build.DenseOfArray(b)).ToArray();
+            int rank = ComputeRank(qr.R, eps);
             return minDim - rank;
         }
 
@@ -912,6 +912,34 @@ namespace Math.Core
                     Q[i][j + 1] = e;
                 }
             }
+        }
+
+        private static double[][] ToJagged(Matrix<double> matrix)
+        {
+            var result = new double[matrix.RowCount][];
+            for (int i = 0; i < matrix.RowCount; i++)
+            {
+                result[i] = matrix.Row(i).ToArray();
+            }
+
+            return result;
+        }
+
+        private static int ComputeRank(Matrix<double> r, double eps)
+        {
+            int n = Math.Min(r.RowCount, r.ColumnCount);
+            double refEl = n > 0 ? Math.Abs(r[0, 0]) : 1.0;
+            double threshold = eps * refEl * Math.Max(r.RowCount, r.ColumnCount);
+            int rank = 0;
+            for (int i = 0; i < n; i++)
+            {
+                if (Math.Abs(r[i, i]) > threshold)
+                {
+                    rank++;
+                }
+            }
+
+            return rank;
         }
     }
 }
