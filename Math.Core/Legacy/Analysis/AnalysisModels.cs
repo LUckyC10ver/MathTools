@@ -161,7 +161,7 @@ namespace MathTools.Core
         private static Vector<double> ReadVector(TextReader reader, int length)
         {
             string line = reader.ReadLine() ?? throw new InvalidOperationException("unexpected end of file");
-            string[] parts = line.Split('\t', StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = line.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length < length)
             {
                 throw new InvalidOperationException("vector length mismatch");
