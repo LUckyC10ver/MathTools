@@ -1,0 +1,11 @@
+nvar=2
+H=2,0;0,2
+f=-2,-2
+Aeq=
+beq=
+Aieq=
+bieq=
+lbd=0,0
+ubd=2,2
+x0=0,0
+xExpected=1,1
